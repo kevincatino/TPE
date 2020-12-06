@@ -4,12 +4,6 @@
 #include <stdlib.h>
 #define BLOCK 15
 
-struct TNode1 {
-    TQ1 hood;
-    struct TNode1 * tail;
-};
-
-typedef struct TNode1 * TList1;
 
 struct TNode23 {
     TQ23 Q23;
@@ -17,8 +11,6 @@ struct TNode23 {
     int dimTreeVec;
     TreeStreet * streetVec;
     int dimStreetVec;
-    int pQty;
-    int tQty;
     struct TNode23 * tail;
 };
 
@@ -32,9 +24,6 @@ struct TNode4 {
 typedef struct TNode4 * TList4;
 
 struct arbolesCDT {
-    TList1 list1;
-    int dim1;
-
     TList23 list23;
     int dim23;
 
@@ -53,7 +42,7 @@ static TList23 addRecHood (TList23 list, char * hood, int pQty, int *added) {
         if (aux == NULL)
             return NULL;
         aux->Q23.hood=hood;
-        aux->pQty=pQty;
+        aux->Q23.pQty=pQty;
         aux->tail=list;
         *added = 1;
         return aux;
@@ -92,7 +81,7 @@ static void searchHood(TList23 list, char * hood, char * street, char * tree) {
     if (list==NULL || (c=strcmp(hood, list->Q23.hood))<0)
         return;
     if (c==0) {
-        list->tQty++;
+        list->Q23.tQty++;
         TreeStreet aux;
         list->treeVec=addQtyToVec(list->treeVec, &list->dimTreeVec, tree, &aux);
         if (aux.tQty > list->Q23.popTree.tQty)
@@ -138,7 +127,6 @@ int addTree (arbolesADT adt, char * hood, char * street, char * tree, double dia
 }
 
 
-
 TQ23 * solveQ23(arbolesADT adt, int * dim) {
     TQ23 *vec = malloc(sizeof(TQ23) * adt->dim23);
     *dim=adt->dim23;
@@ -172,13 +160,6 @@ static void freeList23(TList23 list) {
     free(list);
 }
 
-static void freeList1(TList1 list) {
-    if (list == NULL)
-        return;
-    freeList1(list->tail);
-    free(list);
-}
-
 static void freeList4(TList4 list) {
     if (list == NULL)
         return;
@@ -187,7 +168,6 @@ static void freeList4(TList4 list) {
 }
 
 void freeADT (arbolesADT adt) {
-    freeList1(adt->list1);
     freeList23(adt->list23);
     freeList4(adt->list4);
     free(adt);

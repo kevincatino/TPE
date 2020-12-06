@@ -10,13 +10,10 @@ typedef struct {
 
 typedef struct {
     char * hood;
-    double density;
-}TQ1;
-
-typedef struct {
-    char * hood;
     TreeStreet popTree;
     TreeStreet popStreet;
+    int pQty;
+    int tQty;
 }TQ23;
 
 typedef struct {
