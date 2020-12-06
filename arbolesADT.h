@@ -31,11 +31,11 @@ int addHood (arbolesADT adt, char * hood, int pQty);
 
 int addTree (arbolesADT adt, char * hood, char * street, char * tree, double diam);
 
-TQ1 * solveQ1(arbolesADT adt);
+TQ1 * solveQ1(arbolesADT adt, int * dim);
 
-TQ23 * solveQ23(arbolesADT adt);
+TQ23 * solveQ23(arbolesADT adt, int * dim);
 
-TQ4 * solveQ4(arbolesADT adt);
+TQ4 * solveQ4(arbolesADT adt, int * dim);
 
 void freeADT (arbolesADT adt);
 

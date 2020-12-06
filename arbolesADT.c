@@ -135,11 +135,12 @@ int addTree (arbolesADT adt, char * hood, char * street, char * tree, double dia
 }
 
 /*
-TQ1 * solveQ1(arbolesADT adt);
+TQ1 * solveQ1(arbolesADT adt, int * dim);
 */
 
-TQ23 * solveQ23(arbolesADT adt) {
+TQ23 * solveQ23(arbolesADT adt, int * dim) {
     TQ23 *vec = malloc(sizeof(TQ23) * adt->dim23);
+    *dim=adt->dim23;
     size_t k = 0;
     TList23 aux = adt->list23;
     while (aux != NULL) {
@@ -149,8 +150,9 @@ TQ23 * solveQ23(arbolesADT adt) {
     return vec;
 }
 
-TQ4 * solveQ4(arbolesADT adt) {
+TQ4 * solveQ4(arbolesADT adt, int * dim) {
     TQ4 *vec = malloc(sizeof(TQ4) * adt->dim4);
+    *dim=adt->dim4;
     size_t k = 0;
     TList4 aux = adt->list4;
     while (aux != NULL) {
