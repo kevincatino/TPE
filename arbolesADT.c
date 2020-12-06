@@ -58,15 +58,15 @@ static TList23 addRecHood (TList23 list, char * hood, int pQty, int *added) {
         *added = 1;
         return aux;
     }
-    list->tail=addRecHood(list->tail, hood, pQty);
+    list->tail=addRecHood(list->tail, hood, pQty, added);
     return list;
 }
 
 int addHood (arbolesADT adt, char * hood, int pQty) {
     int added = 0;
     adt->list23=addRecHood(adt->list23, hood, pQty, &added);
-    adt->dim23++;
-    return added;
+    adt->dim23+=added;
+    return adt->list23!=NULL;
 }
 
 static TreeStreet * addQtyToVec(TreeStreet * vec, int * dim, char * name, TreeStreet * aux) {
@@ -110,10 +110,12 @@ static TList4 addRecTreeQ4(TList4 list, char * name, double diam, int *added) {
     int c;
     if (list==NULL || (c=strcmp(name, list->Q4.tree))<0) {
         TList4 aux=malloc(sizeof(*aux));
+        if (aux==NULL)
+            return NULL;
         aux->Q4.tree=name;
         aux->Q4.dMin=aux->Q4.dMax=diam;
         aux->tail=list;
-        *added = 0;
+        *added = 1;
         return aux;
     }
     if (c==0) {
@@ -123,20 +125,19 @@ static TList4 addRecTreeQ4(TList4 list, char * name, double diam, int *added) {
             list->Q4.dMax=diam;
         return list;
     }
-    list->tail=addRecTreeQ4(list->tail, name, diam);
+    list->tail=addRecTreeQ4(list->tail, name, diam, added);
     return list;
 }
 
 int addTree (arbolesADT adt, char * hood, char * street, char * tree, double diam) {
     int added = 0;
     adt->list4=addRecTreeQ4(adt->list4, tree, diam, &added);
+    adt->dim4+=added;
     searchHood(adt->list23, hood, street, tree);
-    return addeld
+    return adt->list4!=NULL;
 }
 
-/*
-TQ1 * solveQ1(arbolesADT adt, int * dim);
-*/
+
 
 TQ23 * solveQ23(arbolesADT adt, int * dim) {
     TQ23 *vec = malloc(sizeof(TQ23) * adt->dim23);
@@ -171,17 +172,24 @@ static void freeList23(TList23 list) {
     free(list);
 }
 
-static void freeList14(TList1 list) {
+static void freeList1(TList1 list) {
     if (list == NULL)
         return;
-    freeList14(list->tail);
+    freeList1(list->tail);
+    free(list);
+}
+
+static void freeList4(TList4 list) {
+    if (list == NULL)
+        return;
+    freeList4(list->tail);
     free(list);
 }
 
 void freeADT (arbolesADT adt) {
-    freeList14(adt->list1);
+    freeList1(adt->list1);
     freeList23(adt->list23);
-    freeList14(adt->list4);
+    freeList4(adt->list4);
     free(adt);
     return;
 }
