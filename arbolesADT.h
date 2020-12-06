@@ -27,9 +27,9 @@ typedef struct {
 
 arbolesADT newStruct ();
 
-void addHood (arbolesADT adt, char * hood, int pQty);
+int addHood (arbolesADT adt, char * hood, int pQty);
 
-void addTree (arbolesADT adt, char * hood, char * street, char * tree, double diam);
+int addTree (arbolesADT adt, char * hood, char * street, char * tree, double diam);
 
 TQ1 * solveQ1(arbolesADT adt);
 

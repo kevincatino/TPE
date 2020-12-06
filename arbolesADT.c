@@ -46,22 +46,27 @@ arbolesADT newStruct () {
     return calloc(1, sizeof(struct arbolesCDT));
 }
 
-static TList23 addRecHood (TList23 list, char * hood, int pQty) {
+static TList23 addRecHood (TList23 list, char * hood, int pQty, int *added) {
     char c;
     if (list==NULL || (c=strcmp(hood, list->Q23.hood))<0) {
         TList23 aux=calloc(1,sizeof(*aux));
+        if (aux == NULL)
+            return NULL;
         aux->Q23.hood=hood;
         aux->pQty=pQty;
         aux->tail=list;
+        *added = 1;
         return aux;
     }
     list->tail=addRecHood(list->tail, hood, pQty);
     return list;
 }
 
-void addHood (arbolesADT adt, char * hood, int pQty) {
-    adt->list23=addRecHood(adt->list23, hood, pQty);
+int addHood (arbolesADT adt, char * hood, int pQty) {
+    int added = 0;
+    adt->list23=addRecHood(adt->list23, hood, pQty, &added);
     adt->dim23++;
+    return added;
 }
 
 static TreeStreet * addQtyToVec(TreeStreet * vec, int * dim, char * name, TreeStreet * aux) {
@@ -101,13 +106,14 @@ static void searchHood(TList23 list, char * hood, char * street, char * tree) {
     searchHood(list->tail, hood, street, tree);
 }
 
-static TList4 addRecTreeQ4(TList4 list, char * name, double diam) {
+static TList4 addRecTreeQ4(TList4 list, char * name, double diam, int *added) {
     int c;
     if (list==NULL || (c=strcmp(name, list->Q4.tree))<0) {
         TList4 aux=malloc(sizeof(*aux));
         aux->Q4.tree=name;
         aux->Q4.dMin=aux->Q4.dMax=diam;
         aux->tail=list;
+        *added = 0;
         return aux;
     }
     if (c==0) {
@@ -121,16 +127,60 @@ static TList4 addRecTreeQ4(TList4 list, char * name, double diam) {
     return list;
 }
 
-void addTree (arbolesADT adt, char * hood, char * street, char * tree, double diam) {
-    adt->list4=addRecTreeQ4(adt->list4, tree, diam);
+int addTree (arbolesADT adt, char * hood, char * street, char * tree, double diam) {
+    int added = 0;
+    adt->list4=addRecTreeQ4(adt->list4, tree, diam, &added);
     searchHood(adt->list23, hood, street, tree);
+    return addeld
 }
 
+/*
 TQ1 * solveQ1(arbolesADT adt);
+*/
 
-TQ23 * solveQ23(arbolesADT adt);
+TQ23 * solveQ23(arbolesADT adt) {
+    TQ23 *vec = malloc(sizeof(TQ23) * adt->dim23);
+    size_t k = 0;
+    TList23 aux = adt->list23;
+    while (aux != NULL) {
+        vec[k++] = aux->Q23;
+        aux = aux->tail;
+    }
+    return vec;
+}
 
-TQ4 * solveQ4(arbolesADT adt);
+TQ4 * solveQ4(arbolesADT adt) {
+    TQ4 *vec = malloc(sizeof(TQ4) * adt->dim4);
+    size_t k = 0;
+    TList4 aux = adt->list4;
+    while (aux != NULL) {
+        vec[k++] = aux->Q4;
+        aux = aux->tail;
+    }
+    return vec;
+}
 
-void freeADT (arbolesADT adt);
+static void freeList23(TList23 list) {
+    if (list == NULL)
+        return;
+    free(list->treeVec);
+    free(list->streetVec);
+    freeList23(list->tail);
+    free(list);
+}
+
+static void freeList14(TList1 list) {
+    if (list == NULL)
+        return;
+    freeList14(list->tail);
+    free(list);
+}
+
+void freeADT (arbolesADT adt) {
+    freeList14(adt->list1);
+    freeList23(adt->list23);
+    freeList14(adt->list4);
+    free(adt);
+    return;
+}
 
