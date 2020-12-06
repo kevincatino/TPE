@@ -6,6 +6,7 @@
 #define WRONG_ARGS 1
 #define ERROR_OPENING 2
 #define NO_MEMORY 3
+#define ERROR_CREATING 4
 
 #define MAX_LINE 128 // Max number of chars to read on each line when using fgets.
 
@@ -27,6 +28,14 @@ void openFiles(FILE * hoodsFile, FILE * treesFile, char * argv[]){
     }
 }
 
+void createFile(FILE * f, char * fileName){
+    f = fopen(fileName,"w");
+    if (f==NULL){
+        fprintf(stderr,"The file could't be created\n");
+        exit(ERROR_CREATING);
+    }
+}
+
 void readHoods(FILE * hoodsFile, arbolesADT adt){
     // Aux variables are defined
     char entireLine[MAX_LINE];
@@ -44,9 +53,10 @@ void readHoods(FILE * hoodsFile, arbolesADT adt){
         int ok = addHood(adt,hoodName,hoodPop);
         if (!ok){
             // The hood is added to the ADT. If there's no memory, the execution aborts.
-            fprintf(stderr,"There was no memory to save the hood.\n");
+            fprintf(stderr,"There is no memory to save the hood.\n");
             exit(NO_MEMORY);
         }
+        fclose(hoodsFile); // After the file was used, it's closed.
     }
 }
 
@@ -81,9 +91,10 @@ void readTrees(FILE * treesFile, arbolesADT adt, int maxCol, int hoodCol, int st
         //After all the data was retrieved, the tree is added.
         int ok = addTree(adt,hood,street,tree,diam);
         if (!ok){
-            fprintf(stderr,"There was no memory to save the tree.\n");
+            fprintf(stderr,"There is no memory to save the tree.\n");
             exit(NO_MEMORY);
         }
+        fclose(treesFile); //After the file was used, it's closed.
     }
 }
 
