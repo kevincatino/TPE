@@ -37,7 +37,7 @@ TQ23 * solveQ23(arbolesADT adt);
 
 TQ4 * solveQ4(arbolesADT adt);
 
-freeADT (arbolesADT adt);
+void freeADT (arbolesADT adt);
 
 
 

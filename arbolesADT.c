@@ -25,7 +25,7 @@ struct TNode23 {
 typedef struct TNode23 * TList23;
 
 struct TNode4 {
-    TQ4 hood;
+    TQ4 Q4;
     struct TNode4 * tail;
 };
 
@@ -49,7 +49,7 @@ arbolesADT newStruct () {
 static TList23 addRecHood (TList23 list, char * hood, int pQty) {
     char c;
     if (list==NULL || (c=strcmp(hood, list->Q23.hood))<0) {
-        TList23 aux=malloc(sizeof(*aux));
+        TList23 aux=calloc(1,sizeof(*aux));
         aux->Q23.hood=hood;
         aux->pQty=pQty;
         aux->tail=list;
@@ -59,7 +59,7 @@ static TList23 addRecHood (TList23 list, char * hood, int pQty) {
     return list;
 }
 
-static void addHood (arbolesADT adt, char * hood, int pQty) {
+void addHood (arbolesADT adt, char * hood, int pQty) {
     adt->list23=addRecHood(adt->list23, hood, pQty);
     adt->dim23++;
 }
@@ -87,13 +87,14 @@ static void searchHood(TList23 list, char * hood, char * street, char * tree) {
     if (list==NULL || (c=strcmp(hood, list->Q23.hood))<0)
         return;
     if (c==0) {
+        list->tQty++;
         TreeStreet aux;
         list->treeVec=addQtyToVec(list->treeVec, &list->dimTreeVec, tree, &aux);
-        if (aux.tQty>list->Q23.popTree.tQty)
+        if (aux.tQty > list->Q23.popTree.tQty)
             list->Q23.popTree=aux;
 
         list->streetVec=addQtyToVec(list->streetVec, &list->dimStreetVec, street, &aux);
-        if (aux.tQty>list->Q23.popStreet.tQty)
+        if (aux.tQty > list->Q23.popStreet.tQty)
             list->Q23.popStreet=aux;
         return;
     }
@@ -102,18 +103,18 @@ static void searchHood(TList23 list, char * hood, char * street, char * tree) {
 
 static TList4 addRecTreeQ4(TList4 list, char * name, double diam) {
     int c;
-    if (list==NULL || (c=strcmp(name, list->hood.tree))<0) {
+    if (list==NULL || (c=strcmp(name, list->Q4.tree))<0) {
         TList4 aux=malloc(sizeof(*aux));
-        aux->hood.tree=name;
-        aux->hood.dMin=aux->hood.dMax=diam;
+        aux->Q4.tree=name;
+        aux->Q4.dMin=aux->Q4.dMax=diam;
         aux->tail=list;
         return aux;
     }
     if (c==0) {
-        if (diam<list->hood.dMin)
-            list->hood.dMin=diam;
-        else if (diam>list->hood.dMax)
-            list->hood.dMax=diam;
+        if (diam<list->Q4.dMin)
+            list->Q4.dMin=diam;
+        else if (diam>list->Q4.dMax)
+            list->Q4.dMax=diam;
         return list;
     }
     list->tail=addRecTreeQ4(list->tail, name, diam);
@@ -131,5 +132,5 @@ TQ23 * solveQ23(arbolesADT adt);
 
 TQ4 * solveQ4(arbolesADT adt);
 
-freeADT (arbolesADT adt);
+void freeADT (arbolesADT adt);
 
