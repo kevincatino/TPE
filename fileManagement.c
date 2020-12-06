@@ -16,14 +16,14 @@ void checkArgs(int args){
     if (!args==3){
         fprintf(stderr,"2 files expected. Please check the README file.\n");
         exit(WRONG_ARGS);
-    } 
+    }
 }
 
 void openFiles(FILE * hoodsFile, FILE * treesFile, char * argv[]){
     hoodsFile = fopen(argv[1],"r");
     treesFile = fopen(argv[2],"r");
     if (hoodsFile==NULL||treesFile==NULL){
-        fprintf(stderr,"The file(s) could't be opened\n");
+        fprintf(stderr,"The file(s) couldn't be opened\n");
         exit(ERROR_OPENING);
     }
 }
@@ -60,7 +60,7 @@ void readTrees(FILE * treesFile, arbolesADT adt, int maxCol, int hoodCol, int st
     char * street;
     char * tree;
     double diam;
-    
+
     fgets(NULL,MAX_LINE,treesFile); // The first line (header) is ignored.
     while (fgets(entireLine,MAX_LINE,treesFile)){
         //Each line in the cvs file is read

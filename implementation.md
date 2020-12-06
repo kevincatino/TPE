@@ -2,10 +2,6 @@
 
 ### arbolesCDT
 
-- **Lista1 de barrios** en orden de densidad x habitantes (queda vacía hasta llamar a la función correspondiente)
-    - Nombre del barrio
-    - Árboles x habitantes
-- **dim1**
 - **Lista4 de árboles** en orden alfabético
     - Nombre del árbol
     - min y máx diámetro
@@ -17,8 +13,6 @@
         - Especie de árbol
         - Cantidad de árboles por especie
     - **dimVec1**
-    - Población
-    - Total de árboles
     - Calle con más árboles y cantidad
     - **Vector de calles** sin orden
         - Nombre de calle
@@ -26,16 +20,13 @@
     - **dimVec2**
 - **dim23**
 
-### TQ1
-
-- Nombre de barrio
-- Densidad de árboles x habitante
-
 ### TQ23
 
 - Nombre de barrio
 - Árbol más popular
 - Calle con más árboles
+- Población
+- Total de árboles
 
 ### TQ4
 
@@ -44,6 +35,20 @@
 - Diámetro max
 
 (definir todos en .h)
+
+## Q1CDT
+
+- **Lista1 de barrios** en orden de densidad x habitantes (queda vacía hasta llamar a la función correspondiente)
+    - Nombre del barrio
+    - Árboles x habitantes
+- **dim1**
+
+### TQ1
+
+- Nombre de barrio
+- Densidad de árboles x habitante
+
+(definir en .h)
 
 # Memoria que debe ser liberada
 
@@ -63,8 +68,9 @@
 1. Agregamos todos los barrios
 2. Agregamos todos los arboles
 3. Con esto logramos cumplir los Querys 2,3,4 dentro de la estructura (el Query2 y 3 pueden devolverse en un mismo vector porque el orden de barrios es el mismo)
-4. Nos faltarÍa una función que genere la lista de barrios en orden de densidad x habitante
-5. Todas las funciones devuelven vectores dinámicos que en el front-end las pasamos al archivo de respuesta de cada Query.
+4. Utilizamos el vector de las Querys23 para agregar los barrios al Q1ADT.
+5. Q1ADT agrega los elementos de forma tal que el orden sea el que requiere la Query1, y la función correspondiente devuelve un vector ordenado de tipo TQ1.
+6. Todas las funciones devuelven vectores dinámicos que en el front-end las pasamos al archivo de respuesta de cada Query.
 
 # Funciones
 
