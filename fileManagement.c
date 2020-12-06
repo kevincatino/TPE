@@ -1,6 +1,8 @@
 #include "arbolesADT.h"
+#include "Q1ADT.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "fileManagement.h"
 
 #define MAX_LINE 128 // Max number of chars to read on each line when using fgets.
@@ -8,26 +10,26 @@
 #define SEPARATOR ";"
 
 int checkArgs(int args){
-    if (!args==3){
+    if (args!=3){
         fprintf(stderr,"2 files expected. Please check the README file.\n");
         return WRONG_ARGS;
     }
     return 0;
 }
 
-int openFiles(FILE * hoodsFile, FILE * treesFile, char * argv[]){
-    hoodsFile = fopen(argv[1],"r");
-    treesFile = fopen(argv[2],"r");
-    if (hoodsFile==NULL||treesFile==NULL){
+int openFiles(FILE ** hoodsFile, FILE ** treesFile, char * argv[]){
+    *hoodsFile = fopen(argv[1],"r");
+    *treesFile = fopen(argv[2],"r");
+    if (*hoodsFile==NULL||*treesFile==NULL){
         fprintf(stderr,"The file(s) couldn't be opened\n");
         return ERROR_OPENING;
     }
     return 0;
 }
 
-int createFile(FILE * f, char * fileName){
-    f = fopen(fileName,"w");
-    if (f==NULL){
+int createFile(FILE ** f, char * fileName){
+    *f = fopen(fileName,"w");
+    if (*f==NULL){
         fprintf(stderr,"The file could't be created\n");
         return ERROR_CREATING;
     }
@@ -72,7 +74,8 @@ int readTrees(FILE * treesFile, arbolesADT adt, int maxCol, int hoodCol, int str
     fgets(NULL,MAX_LINE,treesFile); // The first line (header) is ignored.
     while (fgets(entireLine,MAX_LINE,treesFile)){
         //Each line in the cvs file is read
-        for (int i=1,read=strtok(entireLine,SEPARATOR);i<maxCol;i++){
+        read=strtok(entireLine,SEPARATOR);
+        for (int i=1;i<maxCol; i++, read=strtok(entireLine,SEPARATOR)){
             // Every column of the line until maxCol is checked to extract the required data.
             if (i==hoodCol){
                 hood=read;
@@ -84,7 +87,7 @@ int readTrees(FILE * treesFile, arbolesADT adt, int maxCol, int hoodCol, int str
                 tree=read;
             }
             if (i==diamCol){
-                diam = trtod(read,NULL); // The function converts the string to a double.
+                diam = strtod(read,NULL); // The function converts the string to a double.
             }
         }
         //After all the data was retrieved, the tree is added.
@@ -96,6 +99,112 @@ int readTrees(FILE * treesFile, arbolesADT adt, int maxCol, int hoodCol, int str
         fclose(treesFile); //After the file was used, it's closed.
     }
     return 0;
+}
+
+int query1(arbolesADT adt, TQ23 * auxVec, int dim){
+
+    FILE * Q1File;
+    int error = createFile(&Q1File,"query1.csv"); // An empty file is created.
+    if (error){
+        return error;
+    }
+
+    fputs(HEADERS_QUERY1,Q1File); // The headers are added to the file.
+
+    Q1ADT Q1 = newQ1struct(); // The q1 adt is created
+
+    for (int i=0;i<dim;i++){
+        // Q1 adt is pupulated with the data requested, extracted from the auxVec (from queries 2 and 3).
+        int ok = addQ1hood(Q1,auxVec[i].hood, (double)auxVec[i].tQty/auxVec[i].pQty);
+        if (!ok){
+            return NO_MEMORY;
+        }
+    }
+
+    TQ1 * vec1 = solveQ1(Q1, &dim); // The query 1 is solved and the data is stores in vec1.
+
+    if (vec1==NULL){
+        return NO_MEMORY;
+    }
+
+    for (int i=0;i<dim;i++){
+        // Each element on vec1 is added to the file in the form of a line.
+        fprintf(Q1File,"%s;%.2f\n", vec1[i].hood, vec1[i].density);
+    }
+
+    free(vec1);
+    free(auxVec);
+    freeQ1(Q1); // The adt used to solve the first query is freed.
+    fclose(Q1File); // The file is closed after being written.
+
+    return 0;
+
+}
+
+ int query23(arbolesADT adt, TQ23 ** auxVec,int * auxDim){
+
+    TQ23 * vec23 = solveQ23(adt,auxDim);
+
+    if (vec23==NULL){
+        return NO_MEMORY;
+    }
+
+    FILE * Q2File; // The file for the query 2 is created
+    int error = createFile(&Q2File,"query2.csv");
+    if (error){
+        return error;
+    }
+    fputs(HEADERS_QUERY2,Q2File); // The headers are added
+
+    // The Q2File is populated with the data
+    for (int i=0;i<*auxDim;i++){
+        // The data requested for each element on vec23 is added to the file in the form of a line.
+        fprintf(Q2File,"%s;%s\n", vec23[i].hood, vec23[i].popTree.name);
+    }
+
+    fclose(Q2File);
+
+    FILE * Q3File;
+    error = createFile(&Q3File,"query3.csv");
+    if (error){
+        return error;
+    }
+    fputs(HEADERS_QUERY3,Q3File);
+
+    for (int i=0;i<*auxDim;i++){
+        fprintf(Q3File,"%s;%d\n", vec23[i].popStreet.name, vec23[i].popStreet.tQty);
+    }
+
+    fclose(Q3File);
+    *auxVec = vec23; // The pointer to the vector vec23 is saved because it will be used to solve the query 1.
+
+    return 0;
+
+}
+
+int query4(arbolesADT adt){
+
+    int dim;
+    TQ4 * vec4 = solveQ4(adt,&dim);
+
+    if (vec4==NULL){
+        return NO_MEMORY;
+    }
+
+    FILE * Q4File;
+    int error = createFile(&Q4File,"query4.csv");
+    if (error){
+        return error;
+    }
+    fputs(HEADERS_QUERY4,Q4File);
+
+    for (int i=0;i<dim;i++){
+        fprintf(Q4File,"%s;%.2f,%.2f\n", vec4[i].tree, vec4[i].dMin, vec4[i].dMax);
+    }
+    free(vec4);
+    fclose(Q4File);
+    return 0;
+
 }
 
 
