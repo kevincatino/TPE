@@ -35,7 +35,7 @@ arbolesADT newStruct () {
     return calloc(1, sizeof(struct arbolesCDT));
 }
 
-static TList23 addRecHood (TList23 list, char * hood, int pQty, int *added) {
+static TList23 addRecHood (TList23 list, char * hood, int pQty) {
     char c;
     if (list==NULL || (c=strcmp(hood, list->Q23.hood))<0) {
         TList23 aux=calloc(1,sizeof(*aux));
@@ -44,17 +44,15 @@ static TList23 addRecHood (TList23 list, char * hood, int pQty, int *added) {
         aux->Q23.hood=hood;
         aux->Q23.pQty=pQty;
         aux->tail=list;
-        *added = 1;
         return aux;
     }
-    list->tail=addRecHood(list->tail, hood, pQty, added);
+    list->tail=addRecHood(list->tail, hood, pQty);
     return list;
 }
 
 int addHood (arbolesADT adt, char * hood, int pQty) {
-    int added = 0;
-    adt->list23=addRecHood(adt->list23, hood, pQty, &added);
-    adt->dim23+=added;
+    adt->list23=addRecHood(adt->list23, hood, pQty);
+    adt->dim23++;
     return adt->list23!=NULL;
 }
 
@@ -69,6 +67,8 @@ static TreeStreet * addQtyToVec(TreeStreet * vec, int * dim, char * name, TreeSt
     }
     if (*dim%BLOCK==0) {
         vec=realloc(vec, sizeof(*vec)*(*dim+BLOCK));
+        if (vec==NULL)
+            return NULL;
     }
     vec[*dim].name=name;
     vec[*dim].tQty=1;
@@ -76,23 +76,27 @@ static TreeStreet * addQtyToVec(TreeStreet * vec, int * dim, char * name, TreeSt
     return vec;
 }
 
-static void searchHood(TList23 list, char * hood, char * street, char * tree) {
+static int searchHood(TList23 list, char * hood, char * street, char * tree) {
     int c;
     if (list==NULL || (c=strcmp(hood, list->Q23.hood))<0)
-        return;
+        return 1;
     if (c==0) {
         list->Q23.tQty++;
         TreeStreet aux;
         list->treeVec=addQtyToVec(list->treeVec, &list->dimTreeVec, tree, &aux);
+        if (list->treeVec==NULL)
+            return 0;
         if (aux.tQty > list->Q23.popTree.tQty)
             list->Q23.popTree=aux;
 
         list->streetVec=addQtyToVec(list->streetVec, &list->dimStreetVec, street, &aux);
+        if (list->streetVec==NULL)
+            return 0;
         if (aux.tQty > list->Q23.popStreet.tQty)
             list->Q23.popStreet=aux;
-        return;
+        return 1;
     }
-    searchHood(list->tail, hood, street, tree);
+    return searchHood(list->tail, hood, street, tree);
 }
 
 static TList4 addRecTreeQ4(TList4 list, char * name, double diam, int *added) {
@@ -122,13 +126,15 @@ int addTree (arbolesADT adt, char * hood, char * street, char * tree, double dia
     int added = 0;
     adt->list4=addRecTreeQ4(adt->list4, tree, diam, &added);
     adt->dim4+=added;
-    searchHood(adt->list23, hood, street, tree);
-    return adt->list4!=NULL;
+
+    return adt->list4!=NULL && searchHood(adt->list23, hood, street, tree)==1;
 }
 
 
 TQ23 * solveQ23(arbolesADT adt, int * dim) {
     TQ23 *vec = malloc(sizeof(TQ23) * adt->dim23);
+    if (vec==NULL)
+        return NULL;
     *dim=adt->dim23;
     size_t k = 0;
     TList23 aux = adt->list23;
@@ -141,6 +147,8 @@ TQ23 * solveQ23(arbolesADT adt, int * dim) {
 
 TQ4 * solveQ4(arbolesADT adt, int * dim) {
     TQ4 *vec = malloc(sizeof(TQ4) * adt->dim4);
+    if (vec==NULL)
+        return NULL;
     *dim=adt->dim4;
     size_t k = 0;
     TList4 aux = adt->list4;
