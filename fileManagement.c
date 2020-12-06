@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-
 //Error codes:
 #define WRONG_ARGS 1
 #define ERROR_OPENING 2
