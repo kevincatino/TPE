@@ -48,9 +48,10 @@ int main (int args, char * argv[]) {
 
     printf("The files were created successfully\n");
     
-    freeADT(adt);
     fclose(hoodsFile);
     fclose(treesFile);
+    freeADT(adt);
+    
     return 0;
 
 }

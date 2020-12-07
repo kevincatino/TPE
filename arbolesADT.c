@@ -35,6 +35,7 @@ struct arbolesCDT {
 arbolesADT newStruct () {
     arbolesADT newADT=calloc(1, sizeof(struct arbolesCDT));
     if (newADT == NULL)
+        return NULL;
     return newADT;
 }
 
@@ -173,6 +174,7 @@ static void freeVecElems(TreeStreet * vec, int dim) {
     for (int i=0 ; i<dim ; i++) {
         free(vec[i].name);
     }
+    return;
 }
 
 static void freeList23(TList23 list) {

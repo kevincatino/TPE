@@ -17,7 +17,6 @@ int main (int args, char * argv[]) {
     // argv[1] -> hoods file (.csv)
     // argv[2] -> trees file (.csv)
 
-
     int error = checkArgs(args);
     if (error)
         return error;
@@ -57,6 +56,7 @@ int main (int args, char * argv[]) {
     
     fclose(hoodsFile);
     fclose(treesFile);
+    freeADT(adt);
 
     return 0;
 }
