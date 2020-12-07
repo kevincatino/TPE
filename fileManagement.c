@@ -2,10 +2,11 @@
 #include "Q1ADT.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <errno.h>
 #include <string.h>
 #include "fileManagement.h"
 
-#define MAX_LINE 128 // Max number of chars to read on each line when using fgets.
+#define MAX_LINE 256 // Max number of chars to read on each line when using fgets.
 
 #define SEPARATOR ";"
 
@@ -21,7 +22,7 @@ int openFiles(FILE ** hoodsFile, FILE ** treesFile, char * argv[]){
     *hoodsFile = fopen(argv[1],"r");
     *treesFile = fopen(argv[2],"r");
     if (*hoodsFile==NULL||*treesFile==NULL){
-        fprintf(stderr,"The file(s) couldn't be opened\n");
+        fprintf(stderr,"The file(s) could not be opened\n");
         return ERROR_OPENING;
     }
     return 0;
@@ -30,7 +31,7 @@ int openFiles(FILE ** hoodsFile, FILE ** treesFile, char * argv[]){
 int createFile(FILE ** f, char * fileName){
     *f = fopen(fileName,"w");
     if (*f==NULL){
-        fprintf(stderr,"The file could't be created\n");
+        fprintf(stderr,"The file could not be created\n");
         return ERROR_CREATING;
     }
     return 0;
@@ -43,8 +44,8 @@ int readHoods(FILE * hoodsFile, arbolesADT adt){
     char * hoodName;
     long hoodPop;
     // The first line (header) is ignored.
-    fgets(NULL,MAX_LINE,hoodsFile);
-    while (fgets(entireLine,MAX_LINE,hoodsFile)){
+    fgets(entireLine,MAX_LINE,hoodsFile);
+    while (fgets(entireLine,MAX_LINE,hoodsFile)!=NULL){
         // for each line, the first col is the hood name and the second one the population.
         read = strtok(entireLine,SEPARATOR);
         hoodName=read; // The name is read and stored.
@@ -56,8 +57,8 @@ int readHoods(FILE * hoodsFile, arbolesADT adt){
             fprintf(stderr,"There is no memory to save the hood.\n");
             return NO_MEMORY;
         }
-        fclose(hoodsFile); // After the file was used, it's closed.
     }
+    fclose(hoodsFile); // After the file was used, it's closed.
     return 0;
 }
 
@@ -71,11 +72,11 @@ int readTrees(FILE * treesFile, arbolesADT adt, int maxCol, int hoodCol, int str
     char * tree;
     double diam;
 
-    fgets(NULL,MAX_LINE,treesFile); // The first line (header) is ignored.
-    while (fgets(entireLine,MAX_LINE,treesFile)){
+    fgets(entireLine,MAX_LINE,treesFile); // The first line (header) is ignored.
+    while (fgets(entireLine,MAX_LINE,treesFile)!=NULL){
         //Each line in the cvs file is read
         read=strtok(entireLine,SEPARATOR);
-        for (int i=1;i<maxCol; i++, read=strtok(entireLine,SEPARATOR)){
+        for (int i=1;i<=maxCol; i++,read=strtok(NULL,SEPARATOR)){
             // Every column of the line until maxCol is checked to extract the required data.
             if (i==hoodCol){
                 hood=read;
@@ -96,8 +97,8 @@ int readTrees(FILE * treesFile, arbolesADT adt, int maxCol, int hoodCol, int str
             fprintf(stderr,"There is no memory to save the tree.\n");
             return NO_MEMORY;
         }
-        fclose(treesFile); //After the file was used, it's closed.
     }
+    fclose(treesFile); //After the file was used, it's closed.
     return 0;
 }
 
@@ -172,7 +173,7 @@ int query1(arbolesADT adt, TQ23 * auxVec, int dim){
     fputs(HEADERS_QUERY3,Q3File);
 
     for (int i=0;i<*auxDim;i++){
-        fprintf(Q3File,"%s;%d\n", vec23[i].popStreet.name, vec23[i].popStreet.tQty);
+        fprintf(Q3File,"%s;%s;%d\n", vec23[i].hood, vec23[i].popStreet.name, vec23[i].popStreet.tQty);
     }
 
     fclose(Q3File);
@@ -199,7 +200,7 @@ int query4(arbolesADT adt){
     fputs(HEADERS_QUERY4,Q4File);
 
     for (int i=0;i<dim;i++){
-        fprintf(Q4File,"%s;%.2f,%.2f\n", vec4[i].tree, vec4[i].dMin, vec4[i].dMax);
+        fprintf(Q4File,"%s;%.2f;%.2f\n", vec4[i].tree, vec4[i].dMin, vec4[i].dMax);
     }
     free(vec4);
     fclose(Q4File);

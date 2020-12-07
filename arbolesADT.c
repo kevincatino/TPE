@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <strings.h>
+#include <errno.h>
 #define BLOCK 15
 
 
@@ -32,16 +34,22 @@ struct arbolesCDT {
 };
 
 arbolesADT newStruct () {
-    return calloc(1, sizeof(struct arbolesCDT));
+    arbolesADT newADT=calloc(1, sizeof(struct arbolesCDT));
+    if (newADT == NULL || errno == ENOMEM)
+    fprintf(stderr, "Error! New ADT could not be created\n");
+    return newADT;
 }
 
 static TList23 addRecHood (TList23 list, char * hood, int pQty) {
     char c;
-    if (list==NULL || (c=strcmp(hood, list->Q23.hood))<0) {
+    if (list==NULL || (c=strcasecmp(hood, list->Q23.hood))<0) {
         TList23 aux=calloc(1,sizeof(*aux));
         if (aux == NULL)
             return NULL;
-        aux->Q23.hood=hood;
+        aux->Q23.hood=malloc(sizeof(char)*(strlen(hood)+1));
+        if (aux->Q23.hood==NULL)
+            return NULL;
+        strcpy(aux->Q23.hood, hood);
         aux->Q23.pQty=pQty;
         aux->tail=list;
         return aux;
@@ -70,7 +78,8 @@ static TreeStreet * addQtyToVec(TreeStreet * vec, int * dim, char * name, TreeSt
         if (vec==NULL)
             return NULL;
     }
-    vec[*dim].name=name;
+    vec[*dim].name=malloc(sizeof(char)*(strlen(name)+1));
+    strcpy(vec[*dim].name,name);
     vec[*dim].tQty=1;
     *aux=vec[(*dim)++];
     return vec;
@@ -78,7 +87,7 @@ static TreeStreet * addQtyToVec(TreeStreet * vec, int * dim, char * name, TreeSt
 
 static int searchHood(TList23 list, char * hood, char * street, char * tree) {
     int c;
-    if (list==NULL || (c=strcmp(hood, list->Q23.hood))<0)
+    if (list==NULL || (c=strcasecmp(hood, list->Q23.hood))<0)
         return 1;
     if (c==0) {
         list->Q23.tQty++;
@@ -105,7 +114,10 @@ static TList4 addRecTreeQ4(TList4 list, char * name, double diam, int *added) {
         TList4 aux=malloc(sizeof(*aux));
         if (aux==NULL)
             return NULL;
-        aux->Q4.tree=name;
+        aux->Q4.tree=malloc(sizeof(char)*(strlen(name)+1));
+        if(aux->Q4.tree==NULL)
+            return NULL;
+        strcpy(aux->Q4.tree, name);
         aux->Q4.dMin=aux->Q4.dMax=diam;
         aux->tail=list;
         *added = 1;
@@ -159,11 +171,20 @@ TQ4 * solveQ4(arbolesADT adt, int * dim) {
     return vec;
 }
 
+static void freeVecElems(TreeStreet * vec, int dim) {
+    for (int i=0 ; i<dim ; i++) {
+        free(vec[i].name);
+    }
+}
+
 static void freeList23(TList23 list) {
     if (list == NULL)
         return;
+    freeVecElems(list->treeVec, list->dimTreeVec);
     free(list->treeVec);
+    freeVecElems(list->streetVec, list->dimStreetVec);
     free(list->streetVec);
+    free(list->Q23.hood);
     freeList23(list->tail);
     free(list);
 }
@@ -171,6 +192,7 @@ static void freeList23(TList23 list) {
 static void freeList4(TList4 list) {
     if (list == NULL)
         return;
+    free(list->Q4.tree);
     freeList4(list->tail);
     free(list);
 }
