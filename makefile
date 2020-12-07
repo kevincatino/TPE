@@ -4,12 +4,12 @@ all: VAN BUE
 
 VAN: OUTPUT_FILE=arbolesADTVAN
 VAN: mainVAN.c
-	$(COMPILER) -o $(OUTPUT_FILE) mainVAN.c arbolesADT.c fileManagement.c $(FLAGS)
+	$(COMPILER) -o $(OUTPUT_FILE) mainVAN.c arbolesADT.c fileManagement.c Q1ADT.c $(FLAGS)
 	@echo Compilation success!
 
 BUE: OUTPUT_FILE=arbolesADTBUE
 BUE: mainBUE.c
-	$(COMPILER) -o $(OUTPUT_FILE) mainBUE.c arbolesADT.c fileManagement.c $(FLAGS)
+	$(COMPILER) -o $(OUTPUT_FILE) mainBUE.c arbolesADT.c fileManagement.c Q1ADT.c $(FLAGS)
 	@echo Compilation success!
 
 clean:
