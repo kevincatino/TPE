@@ -37,7 +37,6 @@ arbolesADT newStruct () {
 }
 
 static TList23 addRecHood (TList23 list, char * hood, int pQty) {
-    char c;
     if (list==NULL || strcasecmp(hood, list->Q23.hood)<0) {
         TList23 aux=calloc(1,sizeof(*aux));
         if (aux == NULL)
