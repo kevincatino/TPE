@@ -136,6 +136,7 @@ int query1(arbolesADT adt, TQ23 * auxVec, int dim){
     free(vec1);
     free(auxVec);
     freeQ1(Q1); // The adt used to solve the first query is freed.
+    freeADT(adt);
     fclose(Q1File); // The file is closed after being written.
 
     return 0;
