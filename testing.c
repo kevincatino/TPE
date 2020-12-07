@@ -2,6 +2,7 @@
 #include "Q1ADT.h"
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 int main () {
     arbolesADT tree=newStruct();
@@ -79,11 +80,8 @@ int main () {
 
     freeQ1(q1);
     freeADT(tree);
-
-      free(vec1);
-      free(vec23);
-      free(vec4);
-
-
+    free(vec1);
+    free(vec23);
+    free(vec4);
 
 }

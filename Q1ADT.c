@@ -1,7 +1,6 @@
 #include "Q1ADT.h"
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 #include <stdio.h>
 
 struct TNode {
@@ -18,16 +17,14 @@ struct Q1CDT {
 
 Q1ADT newQ1struct () {
     Q1ADT newQ1 = calloc(1, sizeof(struct Q1CDT));
-    if (newQ1 == NULL || errno == ENOMEM)
-        fprintf(stderr, "Error! New Q1 could not be created\n");
+    if (newQ1 == NULL)
     return newQ1;
 }
 
 static TList addRec(TList list, char * hood, double density) {
     if (list==NULL || density > list->Q1.density) { //if two hoods have the same density, the one that is already on the list remains on that position.
         TList aux=malloc(sizeof(*aux));
-        if (aux==NULL || errno == ENOMEM) {
-            fprintf(stderr, "Error! Aux list could not be created\n");
+        if (aux==NULL) {
             return NULL;
         }
         aux->Q1.hood=hood;

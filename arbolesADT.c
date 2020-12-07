@@ -3,7 +3,6 @@
 #include <string.h>
 #include <stdlib.h>
 #include <strings.h>
-#include <errno.h>
 #define BLOCK 15
 
 
@@ -35,8 +34,7 @@ struct arbolesCDT {
 
 arbolesADT newStruct () {
     arbolesADT newADT=calloc(1, sizeof(struct arbolesCDT));
-    if (newADT == NULL || errno == ENOMEM)
-    fprintf(stderr, "Error! New ADT could not be created\n");
+    if (newADT == NULL)
     return newADT;
 }
 

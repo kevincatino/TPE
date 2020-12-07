@@ -14,6 +14,8 @@
 #define HEADERS_QUERY3 "BARRIO;CALLE_CON_MAS_ARBOLES;ARBOLES\n"
 #define HEADERS_QUERY4 "NOMBRE_CIENTIFICO;MIN;MAX\n"
 
+void errorCode (int code);
+
 int checkArgs(int args);
 
 int openFiles(FILE ** hoodsFile, FILE ** treesFile, char * argv[]);

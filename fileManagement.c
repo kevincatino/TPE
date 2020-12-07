@@ -10,9 +10,27 @@
 
 #define SEPARATOR ";"
 
+void errorCode (int code) {
+    switch (code) {
+        case WRONG_ARGS:
+            fprintf(stderr,"2 files expected. Please check the README file.\n");
+            break;
+        case ERROR_OPENING:
+            fprintf(stderr,"The file(s) could not be opened\n");
+            break;
+        case NO_MEMORY:
+            fprintf(stderr,"Memory allocation failure\n");
+            break;
+        case ERROR_CREATING:
+            fprintf(stderr,"The file(s) could not be created\n");
+            break;
+
+    }
+}
+
 int checkArgs(int args){
     if (args!=3){
-        fprintf(stderr,"2 files expected. Please check the README file.\n");
+        errorCode(WRONG_ARGS);
         return WRONG_ARGS;
     }
     return 0;
@@ -22,7 +40,7 @@ int openFiles(FILE ** hoodsFile, FILE ** treesFile, char * argv[]){
     *hoodsFile = fopen(argv[1],"r");
     *treesFile = fopen(argv[2],"r");
     if (*hoodsFile==NULL||*treesFile==NULL){
-        fprintf(stderr,"The file(s) could not be opened\n");
+        errorCode(ERROR_OPENING);
         return ERROR_OPENING;
     }
     return 0;
@@ -31,7 +49,7 @@ int openFiles(FILE ** hoodsFile, FILE ** treesFile, char * argv[]){
 int createFile(FILE ** f, char * fileName){
     *f = fopen(fileName,"w");
     if (*f==NULL){
-        fprintf(stderr,"The file could not be created\n");
+        errorCode(ERROR_CREATING);
         return ERROR_CREATING;
     }
     return 0;
@@ -54,7 +72,7 @@ int readHoods(FILE * hoodsFile, arbolesADT adt){
         int ok = addHood(adt,hoodName,hoodPop);
         if (!ok){
             // The hood is added to the ADT. If there's no memory, the execution aborts.
-            fprintf(stderr,"There is no memory to save the hood.\n");
+            errorCode(NO_MEMORY);
             return NO_MEMORY;
         }
     }
@@ -94,7 +112,7 @@ int readTrees(FILE * treesFile, arbolesADT adt, int maxCol, int hoodCol, int str
         //After all the data was retrieved, the tree is added.
         int ok = addTree(adt,hood,street,tree,diam);
         if (!ok){
-            fprintf(stderr,"There is no memory to save the tree.\n");
+            errorCode(NO_MEMORY);
             return NO_MEMORY;
         }
     }
@@ -118,6 +136,7 @@ int query1(arbolesADT adt, TQ23 * auxVec, int dim){
         // Q1 adt is pupulated with the data requested, extracted from the auxVec (from queries 2 and 3).
         int ok = addQ1hood(Q1,auxVec[i].hood, (double)auxVec[i].tQty/auxVec[i].pQty);
         if (!ok){
+            errorCode(NO_MEMORY);
             return NO_MEMORY;
         }
     }
@@ -125,6 +144,7 @@ int query1(arbolesADT adt, TQ23 * auxVec, int dim){
     TQ1 * vec1 = solveQ1(Q1, &dim); // The query 1 is solved and the data is stores in vec1.
 
     if (vec1==NULL){
+        errorCode(NO_MEMORY);
         return NO_MEMORY;
     }
 
@@ -148,6 +168,7 @@ int query1(arbolesADT adt, TQ23 * auxVec, int dim){
     TQ23 * vec23 = solveQ23(adt,auxDim);
 
     if (vec23==NULL){
+        errorCode(NO_MEMORY);
         return NO_MEMORY;
     }
 
@@ -190,6 +211,7 @@ int query4(arbolesADT adt){
     TQ4 * vec4 = solveQ4(adt,&dim);
 
     if (vec4==NULL){
+        errorCode(NO_MEMORY);
         return NO_MEMORY;
     }
 
