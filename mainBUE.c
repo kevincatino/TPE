@@ -5,7 +5,7 @@
 #include "Q1ADT.h"
 
 // Columns for trees data
-#define MAX_COLS_BA 13 // (Starting at 1)
+#define MAX_COLS_BA 12 // (Starting at 1)
 
 #define COL_HOOD_BA 3
 #define COL_STREET_BA 5
