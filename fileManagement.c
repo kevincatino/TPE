@@ -15,7 +15,7 @@
 void errorCode (int code) {
     switch (code) {
         case WRONG_ARGS:
-            fprintf(stderr,"3 arguments expected. Please check the README file.\n");
+            fprintf(stderr,"2 files expected. Please check the README file.\n");
             break;
         case ERROR_OPENING:
             fprintf(stderr,"The file(s) could not be opened\n");
