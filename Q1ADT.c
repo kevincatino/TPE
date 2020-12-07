@@ -16,10 +16,7 @@ struct Q1CDT {
 };
 
 Q1ADT newQ1struct () {
-    Q1ADT newQ1 = calloc(1, sizeof(struct Q1CDT));
-    if (newQ1 == NULL)
-        return NULL;
-    return newQ1;
+    return calloc(1, sizeof(struct Q1CDT));
 }
 
 static TList addRec(TList list, char * hood, double density) {

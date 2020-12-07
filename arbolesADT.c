@@ -33,10 +33,7 @@ struct arbolesCDT {
 };
 
 arbolesADT newStruct () {
-    arbolesADT newADT=calloc(1, sizeof(struct arbolesCDT));
-    if (newADT == NULL)
-        return NULL;
-    return newADT;
+    return calloc(1, sizeof(struct arbolesCDT));
 }
 
 static TList23 addRecHood (TList23 list, char * hood, int pQty) {
