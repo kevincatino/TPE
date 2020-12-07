@@ -54,6 +54,9 @@ int main (int args, char * argv[]) {
         return error;
 
     printf("The files were created successfully\n");
+    
+    fclose(hoodsFile);
+    fclose(treesFile);
 
     return 0;
 }

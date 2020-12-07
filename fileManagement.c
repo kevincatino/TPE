@@ -8,12 +8,14 @@
 
 #define MAX_LINE 256 // Max number of chars to read on each line when using fgets.
 
+#define ARG_QTY 3
+
 #define SEPARATOR ";"
 
 void errorCode (int code) {
     switch (code) {
         case WRONG_ARGS:
-            fprintf(stderr,"2 files expected. Please check the README file.\n");
+            fprintf(stderr,"3 arguments expected. Please check the README file.\n");
             break;
         case ERROR_OPENING:
             fprintf(stderr,"The file(s) could not be opened\n");
@@ -24,12 +26,11 @@ void errorCode (int code) {
         case ERROR_CREATING:
             fprintf(stderr,"The file(s) could not be created\n");
             break;
-
     }
 }
 
 int checkArgs(int args){
-    if (args!=3){
+    if (args!=ARG_QTY){
         errorCode(WRONG_ARGS);
         return WRONG_ARGS;
     }
@@ -39,7 +40,7 @@ int checkArgs(int args){
 int openFiles(FILE ** hoodsFile, FILE ** treesFile, char * argv[]){
     *hoodsFile = fopen(argv[1],"r");
     *treesFile = fopen(argv[2],"r");
-    if (*hoodsFile==NULL||*treesFile==NULL){
+    if (hoodsFile==NULL||treesFile==NULL){
         errorCode(ERROR_OPENING);
         return ERROR_OPENING;
     }
