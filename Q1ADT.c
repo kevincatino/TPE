@@ -34,14 +34,6 @@ static TList addRec(TList list, char * hood, double density) {
     return list;
 }
 
-/*
-static void truncate (double *val) {
-    *val *= 100;
-    int aux = (int)*val;
-    *val = aux/100.0;
-};
-*/
-
 static void addToVec(TList list, TQ1 * vec) {
     if (list==NULL)
         return;

@@ -37,8 +37,7 @@ arbolesADT newStruct () {
 }
 
 static TList23 addRecHood (TList23 list, char * hood, int pQty) {
-    char c;
-    if (list==NULL || (c=strcasecmp(hood, list->Q23.hood))<0) {
+    if (list==NULL || strcasecmp(hood, list->Q23.hood)<0) {
         TList23 aux=calloc(1,sizeof(*aux));
         if (aux == NULL)
             return NULL;
@@ -135,7 +134,7 @@ int addTree (arbolesADT adt, char * hood, char * street, char * tree, double dia
     adt->list4=addRecTreeQ4(adt->list4, tree, diam, &added);
     adt->dim4+=added;
 
-    return adt->list4!=NULL && searchHood(adt->list23, hood, street, tree)==1;
+    return adt->list4!=NULL && searchHood(adt->list23, hood, street, tree);
 }
 
 
