@@ -21,6 +21,7 @@ En el caso de querer eliminar los ejecutables creados:
 
 ## Ejecucion
 Una vez que los ejecutables fueron generados, estos se pueden invocar de la siguiente forma (en el caso que los archivos .csv se encuentran en el mismo directorio):
+
 ./arbolesADTBUE arbolesBUE.csv barriosBUE.csv
 
 ./arbolesADTVAN arbolesVAN.csv barriosVAN.csv
@@ -31,6 +32,7 @@ Una vez que los ejecutables fueron generados, estos se pueden invocar de la sigu
 ## Post ejecucion
 En la salida estandar se debera ver un mensaje que diga 
 "The files were created successfully".
+
 **IMPORANTE:** Si este texto no aparece es porque hubo un error. De ser este el caso, tambien aparecera un mensaje apropiado explicando que fue lo que sucedio. 
 
 Ademas, en el mismo directorio donde se ejecuto el programa se habran creado los siguientes archivos:
