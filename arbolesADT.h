@@ -34,11 +34,11 @@ arbolesADT newStruct ();
 
 /* Adds neighborhood name and population to the ADT. Returns 1 if the neighborhood is added correctly.
 If an issue is encountered while allocating memory for it, the return value is 0*/
-int addHood (arbolesADT adt, char * hood, int pQty);
+int addHood (arbolesADT adt, const char * hood, int pQty);
 
 /* Adds tree species to the ADT. Returns 1 if the all values are added correctly.
 If an issue is encountered while allocating memory for it, the return value is 0*/
-int addTree (arbolesADT adt, char * hood, char * street, char * tree, double diam);
+int addTree (arbolesADT adt, const char * hood, const char * street, const char * tree, double diam);
 
 /*Returns an array of TQ23 structures that is ordered by neighborhood names in alphabetical order.
 The dimension of the array is stored in *dim.

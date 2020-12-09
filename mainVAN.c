@@ -9,7 +9,9 @@
 #define COL_TREENAME_VA 7
 #define COL_DIAM_VA 16
 
-int main (int args, char * argv[]) {
+#define IDENTIFIER "VAN"
+
+int main (int args, const char * argv[]) {
 
     int error = checkArgs(args);
     if (error)
@@ -31,22 +33,9 @@ int main (int args, char * argv[]) {
     if (error)
         return error;
 
-    error = query4(adt);
+    error=solveQuerys (adt,IDENTIFIER);
     if (error)
-        return error;
-
-    TQ23 * auxVec;
-    int auxDim;
-
-    error = query23(adt,&auxVec,&auxDim);
-    if (error)
-        return error;
-
-    error = query1(adt,auxVec,auxDim);
-    if (error)
-        return error;
-
-    printf("The files were created successfully\n");
+      return error;
 
     return 0;
 

@@ -36,7 +36,7 @@ arbolesADT newStruct () {
     return calloc(1, sizeof(struct arbolesCDT));
 }
 
-static TList23 addRecHood (TList23 list, char * hood, int pQty) {
+static TList23 addRecHood (TList23 list, const char * hood, int pQty) {
     if (list==NULL || strcasecmp(hood, list->Q23.hood)<0) {
         TList23 aux=calloc(1,sizeof(*aux));
         if (aux == NULL)
@@ -53,13 +53,13 @@ static TList23 addRecHood (TList23 list, char * hood, int pQty) {
     return list;
 }
 
-int addHood (arbolesADT adt, char * hood, int pQty) {
+int addHood (arbolesADT adt, const char * hood, int pQty) {
     adt->list23=addRecHood(adt->list23, hood, pQty);
     adt->dim23++;
     return adt->list23!=NULL;
 }
 
-static TreeStreet * addQtyToVec(TreeStreet * vec, int * dim, char * name, TreeStreet * aux) {
+static TreeStreet * addQtyToVec(TreeStreet * vec, int * dim, const char * name, TreeStreet * aux) {
     int i;
     for (i=0 ; i<*dim ; i++) {
         if (!strcmp(vec[i].name, name)) {
@@ -80,7 +80,7 @@ static TreeStreet * addQtyToVec(TreeStreet * vec, int * dim, char * name, TreeSt
     return vec;
 }
 
-static int searchHood(TList23 list, char * hood, char * street, char * tree) {
+static int searchHood(TList23 list, const char * hood, const char * street, const char * tree) {
     int c;
     if (list==NULL || (c=strcasecmp(hood, list->Q23.hood))<0)
         return 1;
@@ -103,7 +103,7 @@ static int searchHood(TList23 list, char * hood, char * street, char * tree) {
     return searchHood(list->tail, hood, street, tree);
 }
 
-static TList4 addRecTreeQ4(TList4 list, char * name, double diam, int *added) {
+static TList4 addRecTreeQ4(TList4 list, const char * name, double diam, int * added) {
     int c;
     if (list==NULL || (c=strcmp(name, list->Q4.tree))<0) {
         TList4 aux=malloc(sizeof(*aux));
@@ -129,7 +129,7 @@ static TList4 addRecTreeQ4(TList4 list, char * name, double diam, int *added) {
     return list;
 }
 
-int addTree (arbolesADT adt, char * hood, char * street, char * tree, double diam) {
+int addTree (arbolesADT adt, const char * hood, const char * street, const char * tree, double diam) {
     int added = 0;
     adt->list4=addRecTreeQ4(adt->list4, tree, diam, &added);
     adt->dim4+=added;
@@ -199,4 +199,3 @@ void freeADT (arbolesADT adt) {
     free(adt);
     return;
 }
-

@@ -1,6 +1,7 @@
 #include "arbolesADT.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/stat.h>
 
 //Error codes:
 #define WRONG_ARGS 1
@@ -18,23 +19,12 @@ void errorMsg (int code);
 
 int checkArgs(int args);
 
-int openFiles(FILE ** hoodsFile, FILE ** treesFile, char * argv[]);
+int openFiles(FILE ** hoodsFile, FILE ** treesFile, const char * argv[]);
 
 int readHoods(FILE * hoodsFile, arbolesADT adt);
 
 int readTrees(FILE * treesFile, arbolesADT adt, int maxCol, int hoodCol, int streetCol, int treeNameCol, int diamCol);
 
-int createFile(FILE ** f, char * fileName);
+int createFile(FILE ** f, const char * fileName);
 
-int query1(arbolesADT adt, TQ23 * auxVec, int dim);
-
-int query23(arbolesADT adt, TQ23 ** auxVec,int * auxDim);
-
-int query4(arbolesADT adt);
-
-
-
-
-
-
-
+int solveQuerys (arbolesADT adt, const char * folder);

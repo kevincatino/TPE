@@ -15,7 +15,7 @@ Q1ADT newQ1struct ();
 
 /* Adds neighborhood name and density to the ADT. Returns 1 if the neighborhood is added correctly.
 If an issue is encountered while allocating memory for it, the return value is 0*/
-int addQ1hood(Q1ADT adt, char * hood, double density);
+int addQ1hood(Q1ADT adt, const char * hood, double density);
 
 /*Returns array of TQ1 structures that is in descending density order. If two neighborhoods have the same density, the order is in ascending alphabetical order*/
 TQ1 * solveQ1(Q1ADT adt, int *dim);

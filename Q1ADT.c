@@ -19,7 +19,7 @@ Q1ADT newQ1struct () {
     return calloc(1, sizeof(struct Q1CDT));
 }
 
-static TList addRec(TList list, char * hood, double density) {
+static TList addHoodRec(TList list, const char * hood, double density) {
     if (list==NULL || density > list->Q1.density) { //if two hoods have the same density, the one that is already on the list remains on that position.
         TList aux=malloc(sizeof(*aux));
         if (aux==NULL) {
@@ -30,7 +30,7 @@ static TList addRec(TList list, char * hood, double density) {
         aux->tail=list;
         return aux;
     }
-    list->tail=addRec(list->tail, hood, density);
+    list->tail=addHoodRec(list->tail, hood, density);
     return list;
 }
 
@@ -41,8 +41,8 @@ static void addToVec(TList list, TQ1 * vec) {
     addToVec(list->tail, vec+1);
 }
 
-int addQ1hood(Q1ADT adt, char * hood, double density) {
-    adt->list=addRec(adt->list, hood, density);
+int addQ1hood(Q1ADT adt, const char * hood, double density) {
+    adt->list=addHoodRec(adt->list, hood, density);
     (adt->dim)++;
     return adt->list != NULL;
 }
@@ -67,4 +67,3 @@ void freeQ1 (Q1ADT adt) {
     freeQ1Rec(adt->list);
     free(adt);
 }
-

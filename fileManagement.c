@@ -37,7 +37,7 @@ int checkArgs(int args){
     return 0;
 }
 
-int openFiles(FILE ** hoodsFile, FILE ** treesFile, char * argv[]){
+int openFiles(FILE ** hoodsFile, FILE ** treesFile, const char * argv[]){
     *hoodsFile = fopen(argv[1],"r");
     *treesFile = fopen(argv[2],"r");
     if (hoodsFile==NULL||treesFile==NULL){
@@ -47,7 +47,7 @@ int openFiles(FILE ** hoodsFile, FILE ** treesFile, char * argv[]){
     return 0;
 }
 
-int createFile(FILE ** f, char * fileName){
+int createFile(FILE ** f, const char * fileName){
     *f = fopen(fileName,"w");
     if (*f==NULL){
         errorMsg(ERROR_CREATING);
@@ -55,6 +55,7 @@ int createFile(FILE ** f, char * fileName){
     }
     return 0;
 }
+
 
 int readHoods(FILE * hoodsFile, arbolesADT adt){
     // Aux variables are defined
@@ -121,10 +122,11 @@ int readTrees(FILE * treesFile, arbolesADT adt, int maxCol, int hoodCol, int str
     return 0;
 }
 
-int query1(arbolesADT adt, TQ23 * auxVec, int dim){
-
+static int query1(arbolesADT adt, TQ23 * auxVec, int dim, const char * folder){
+    char path[255];
+    sprintf(path, "%s/query1.csv", folder);
     FILE * Q1File;
-    int error = createFile(&Q1File,"query1.csv"); // An empty file is created.
+    int error = createFile(&Q1File, path); // An empty file is created.
     if (error){
         return error;
     }
@@ -142,7 +144,7 @@ int query1(arbolesADT adt, TQ23 * auxVec, int dim){
         }
     }
 
-    TQ1 * vec1 = solveQ1(Q1, &dim); // The query 1 is solved and the data is stores in vec1.
+    TQ1 * vec1 = solveQ1(Q1, &dim); // The query 1 is solved and the data is stored in vec1.
 
     if (vec1==NULL){
         errorMsg(NO_MEMORY);
@@ -164,9 +166,11 @@ int query1(arbolesADT adt, TQ23 * auxVec, int dim){
 
 }
 
- int query23(arbolesADT adt, TQ23 ** auxVec,int * auxDim){
+ static int query23(arbolesADT adt, TQ23 ** auxVec, int * auxDim, const char * folder){
 
     TQ23 * vec23 = solveQ23(adt,auxDim);
+    char path[255];
+    sprintf(path, "%s/query2.csv", folder);
 
     if (vec23==NULL){
         errorMsg(NO_MEMORY);
@@ -174,7 +178,7 @@ int query1(arbolesADT adt, TQ23 * auxVec, int dim){
     }
 
     FILE * Q2File; // The file for the query 2 is created
-    int error = createFile(&Q2File,"query2.csv");
+    int error = createFile(&Q2File,path);
     if (error){
         return error;
     }
@@ -187,9 +191,9 @@ int query1(arbolesADT adt, TQ23 * auxVec, int dim){
     }
 
     fclose(Q2File);
-
+    sprintf(path, "%s/query3.csv", folder);
     FILE * Q3File;
-    error = createFile(&Q3File,"query3.csv");
+    error = createFile(&Q3File,path);
     if (error){
         return error;
     }
@@ -206,18 +210,20 @@ int query1(arbolesADT adt, TQ23 * auxVec, int dim){
 
 }
 
-int query4(arbolesADT adt){
+static int query4(arbolesADT adt, const char * folder){
 
     int dim;
     TQ4 * vec4 = solveQ4(adt,&dim);
 
+    char path[255];
+    sprintf(path, "%s/query4.csv", folder);
     if (vec4==NULL){
         errorMsg(NO_MEMORY);
         return NO_MEMORY;
     }
 
     FILE * Q4File;
-    int error = createFile(&Q4File,"query4.csv");
+    int error = createFile(&Q4File,path);
     if (error){
         return error;
     }
@@ -232,6 +238,24 @@ int query4(arbolesADT adt){
 
 }
 
+int solveQuerys (arbolesADT adt, const char * folder) {
+  mkdir(folder, 0777);
+  int error;
+  error = query4(adt, folder);
+  if (error)
+      return error;
 
+  TQ23 * auxVec;
+  int auxDim;
 
+  error = query23(adt,&auxVec,&auxDim, folder);
+  if (error)
+      return error;
 
+  error = query1(adt,auxVec,auxDim,folder);
+  if (error)
+      return error;
+
+  printf("The files were created successfully\n");
+  return 0;
+}
