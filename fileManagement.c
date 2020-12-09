@@ -47,7 +47,7 @@ int openFiles(FILE ** hoodsFile, FILE ** treesFile, const char * argv[]){
     return 0;
 }
 
-int createFile(FILE ** f, const char * fileName){
+static int createFile(FILE ** f, const char * fileName){
     *f = fopen(fileName,"w");
     if (*f==NULL){
         errorMsg(ERROR_CREATING);
@@ -136,7 +136,7 @@ static int query1(arbolesADT adt, TQ23 * auxVec, int dim, const char * folder){
     Q1ADT Q1 = newQ1struct(); // The q1 adt is created
 
     for (int i=0;i<dim;i++){
-        // Q1 adt is pupulated with the data requested, extracted from the auxVec (from queries 2 and 3).
+        // Q1 adt is filled with the data requested, extracted from auxVec (from queries 2 and 3).
         int ok = addQ1hood(Q1,auxVec[i].hood, (double)auxVec[i].tQty/auxVec[i].pQty);
         if (!ok){
             errorMsg(NO_MEMORY);
@@ -197,6 +197,8 @@ static int query1(arbolesADT adt, TQ23 * auxVec, int dim, const char * folder){
     if (error){
         return error;
     }
+
+    
     fputs(HEADERS_QUERY3,Q3File);
 
     for (int i=0;i<*auxDim;i++){
