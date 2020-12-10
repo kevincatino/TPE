@@ -1,7 +1,7 @@
 #include "arbolesADT.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/stat.h>
+
 
 //Error codes:
 #define WRONG_ARGS 1

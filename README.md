@@ -35,7 +35,7 @@ En la salida estandar se debera ver un mensaje que diga
 
 **IMPORANTE:** Si este texto no aparece es porque hubo un error. De ser este el caso, tambien aparecera un mensaje apropiado explicando que fue lo que sucedio.
 
-Ademas, en el mismo directorio se creara una carpeta denominada "BUE" o "VAN" respectivamente, dentro de la cual se habran creado los siguientes archivos:
+Ademas, en el mismo directorio se habran creado los siguientes archivos:
 - query1.csv
 - query2.csv
 - query3.csv

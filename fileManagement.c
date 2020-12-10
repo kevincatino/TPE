@@ -123,10 +123,8 @@ int readTrees(FILE * treesFile, arbolesADT adt, int maxCol, int hoodCol, int str
 }
 
 static int query1(arbolesADT adt, TQ23 * auxVec, int dim, const char * folder){
-    char path[255];
-    sprintf(path, "%s/query1.csv", folder);
     FILE * Q1File;
-    int error = createFile(&Q1File, path); // An empty file is created.
+    int error = createFile(&Q1File,"query1.csv"); // An empty file is created.
     if (error){
         return error;
     }
@@ -169,8 +167,6 @@ static int query1(arbolesADT adt, TQ23 * auxVec, int dim, const char * folder){
  static int query23(arbolesADT adt, TQ23 ** auxVec, int * auxDim, const char * folder){
 
     TQ23 * vec23 = solveQ23(adt,auxDim);
-    char path[255];
-    sprintf(path, "%s/query2.csv", folder);
 
     if (vec23==NULL){
         errorMsg(NO_MEMORY);
@@ -178,7 +174,7 @@ static int query1(arbolesADT adt, TQ23 * auxVec, int dim, const char * folder){
     }
 
     FILE * Q2File; // The file for the query 2 is created
-    int error = createFile(&Q2File,path);
+    int error = createFile(&Q2File,"query2.csv");
     if (error){
         return error;
     }
@@ -187,22 +183,27 @@ static int query1(arbolesADT adt, TQ23 * auxVec, int dim, const char * folder){
     // The Q2File is populated with the data
     for (int i=0;i<*auxDim;i++){
         // The data requested for each element on vec23 is added to the file in the form of a line.
-        fprintf(Q2File,"%s;%s\n", vec23[i].hood, vec23[i].popTree.name);
+        char * treeName="No trees";
+        if (vec23[i].tQty>0)
+          treeName=vec23[i].popTree.name;
+        fprintf(Q2File,"%s;%s\n", vec23[i].hood,treeName);
     }
 
     fclose(Q2File);
-    sprintf(path, "%s/query3.csv", folder);
     FILE * Q3File;
-    error = createFile(&Q3File,path);
+    error = createFile(&Q3File,"query3.csv");
     if (error){
         return error;
     }
 
-    
+
     fputs(HEADERS_QUERY3,Q3File);
 
     for (int i=0;i<*auxDim;i++){
-        fprintf(Q3File,"%s;%s;%d\n", vec23[i].hood, vec23[i].popStreet.name, vec23[i].popStreet.tQty);
+      char * streetName="No trees";
+      if (vec23[i].tQty>0)
+        streetName=vec23[i].popStreet.name;
+      fprintf(Q3File,"%s;%s;%d\n", vec23[i].hood, streetName, vec23[i].popStreet.tQty);
     }
 
     fclose(Q3File);
@@ -216,16 +217,13 @@ static int query4(arbolesADT adt, const char * folder){
 
     int dim;
     TQ4 * vec4 = solveQ4(adt,&dim);
-
-    char path[255];
-    sprintf(path, "%s/query4.csv", folder);
     if (vec4==NULL){
         errorMsg(NO_MEMORY);
         return NO_MEMORY;
     }
 
     FILE * Q4File;
-    int error = createFile(&Q4File,path);
+    int error = createFile(&Q4File,"query4.csv");
     if (error){
         return error;
     }
@@ -241,7 +239,6 @@ static int query4(arbolesADT adt, const char * folder){
 }
 
 int solveQuerys (arbolesADT adt, const char * folder) {
-  mkdir(folder, 0777);
   int error;
   error = query4(adt, folder);
   if (error)
