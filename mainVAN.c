@@ -9,7 +9,6 @@
 #define COL_TREENAME_VA 7
 #define COL_DIAM_VA 16
 
-#define IDENTIFIER "VAN"
 
 int main (int args, const char * argv[]) {
 
@@ -33,7 +32,7 @@ int main (int args, const char * argv[]) {
     if (error)
         return error;
 
-    error=solveQuerys (adt,IDENTIFIER);
+    error=solveQuerys (adt);
     if (error)
       return error;
 

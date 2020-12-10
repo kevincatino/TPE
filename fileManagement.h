@@ -25,4 +25,4 @@ int readHoods(FILE * hoodsFile, arbolesADT adt);
 
 int readTrees(FILE * treesFile, arbolesADT adt, int maxCol, int hoodCol, int streetCol, int treeNameCol, int diamCol);
 
-int solveQuerys (arbolesADT adt, const char * folder);
+int solveQuerys (arbolesADT adt);

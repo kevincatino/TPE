@@ -10,7 +10,6 @@
 #define COL_TREENAME_BA 8
 #define COL_DIAM_BA 12
 
-#define IDENTIFIER "BUE"
 
 int main (int args, const char * argv[]) {
 
@@ -40,7 +39,7 @@ int main (int args, const char * argv[]) {
         return error;
 
 
-    error=solveQuerys (adt,IDENTIFIER);
+    error=solveQuerys (adt);
     if (error)
       return error;
 

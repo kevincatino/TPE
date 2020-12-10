@@ -122,7 +122,7 @@ int readTrees(FILE * treesFile, arbolesADT adt, int maxCol, int hoodCol, int str
     return 0;
 }
 
-static int query1(arbolesADT adt, TQ23 * auxVec, int dim, const char * folder){
+static int query1(arbolesADT adt, TQ23 * auxVec, int dim){
     FILE * Q1File;
     int error = createFile(&Q1File,"query1.csv"); // An empty file is created.
     if (error){
@@ -164,7 +164,7 @@ static int query1(arbolesADT adt, TQ23 * auxVec, int dim, const char * folder){
 
 }
 
- static int query23(arbolesADT adt, TQ23 ** auxVec, int * auxDim, const char * folder){
+ static int query23(arbolesADT adt, TQ23 ** auxVec, int * auxDim){
 
     TQ23 * vec23 = solveQ23(adt,auxDim);
 
@@ -213,7 +213,7 @@ static int query1(arbolesADT adt, TQ23 * auxVec, int dim, const char * folder){
 
 }
 
-static int query4(arbolesADT adt, const char * folder){
+static int query4(arbolesADT adt){
 
     int dim;
     TQ4 * vec4 = solveQ4(adt,&dim);
@@ -238,20 +238,20 @@ static int query4(arbolesADT adt, const char * folder){
 
 }
 
-int solveQuerys (arbolesADT adt, const char * folder) {
+int solveQuerys (arbolesADT adt) {
   int error;
-  error = query4(adt, folder);
+  error = query4(adt);
   if (error)
       return error;
 
   TQ23 * auxVec;
   int auxDim;
 
-  error = query23(adt,&auxVec,&auxDim, folder);
+  error = query23(adt,&auxVec,&auxDim);
   if (error)
       return error;
 
-  error = query1(adt,auxVec,auxDim,folder);
+  error = query1(adt,auxVec,auxDim);
   if (error)
       return error;
 
