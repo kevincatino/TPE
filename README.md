@@ -22,11 +22,11 @@ En el caso de querer eliminar los ejecutables creados:
 ## Ejecucion
 Una vez que los ejecutables fueron generados, estos se pueden invocar de la siguiente forma (en el caso que los archivos .csv se encuentran en el mismo directorio):
 
-./arbolesADTBUE barriosBUE.csv arbolesBUE.csv 
+./arbolesADTBUE arbolesBUE.csv barriosBUE.csv 
 
-./arbolesADTVAN barriosVAN.csv arbolesVAN.csv 
+./arbolesADTVAN arbolesVAN.csv barriosVAN.csv 
 
-**IMPORANTE:** Si los archivos de datos no se encuentran en el mismo directorio debe invocarse agregando los paths correspondientes. Tambien debe respetars el orden de los archivos para obtener el resultado esperado.
+**IMPORANTE:** Si los archivos de datos no se encuentran en el mismo directorio debe invocarse agregando los paths correspondientes. Tambien debe respetarse el orden de los archivos para obtener el resultado esperado.
 
 
 ## Post ejecucion
