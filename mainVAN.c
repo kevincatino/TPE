@@ -11,7 +11,7 @@
 
 
 int main (int args, const char * argv[]) {
-    
+
     // Useful information:
     // argv[0] -> program name
     // argv[1] -> trees file (.csv)
@@ -23,7 +23,7 @@ int main (int args, const char * argv[]) {
 
     FILE * hoodsFile;
     FILE * treesFile;
-    error = openFiles(&hoodsFile,&treesFile,argv);
+    error = openFiles(&treesFile,&hoodsFile,argv);
     if (error)
         return error;
 
