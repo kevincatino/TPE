@@ -59,12 +59,11 @@ int addHood (arbolesADT adt, const char * hood, int pQty) {
     return adt->list23!=NULL;
 }
 
-static TreeStreet * addQtyToVec(TreeStreet * vec, int * dim, const char * name, TreeStreet * aux) {
+static TreeStreet * addQtyToVec(TreeStreet * vec, int * dim, const char * name) {
     int i;
     for (i=0 ; i<*dim ; i++) {
         if (!strcmp(vec[i].name, name)) {
             vec[i].tQty++;
-            *aux=vec[i];
             return vec;
         }
     }
@@ -75,8 +74,7 @@ static TreeStreet * addQtyToVec(TreeStreet * vec, int * dim, const char * name, 
     }
     vec[*dim].name=malloc(sizeof(char)*(strlen(name)+1));
     strcpy(vec[*dim].name,name);
-    vec[*dim].tQty=1;
-    *aux=vec[(*dim)++];
+    vec[(*dim)++].tQty=1;
     return vec;
 }
 
@@ -86,18 +84,14 @@ static int searchHood(TList23 list, const char * hood, const char * street, cons
         return 1;
     if (c==0) {
         list->Q23.tQty++;
-        TreeStreet aux;
-        list->treeVec=addQtyToVec(list->treeVec, &list->dimTreeVec, tree, &aux);
+        list->treeVec=addQtyToVec(list->treeVec, &list->dimTreeVec, tree);
         if (list->treeVec==NULL)
             return 0;
-        if (aux.tQty > list->Q23.popTree.tQty)
-            list->Q23.popTree=aux;
 
-        list->streetVec=addQtyToVec(list->streetVec, &list->dimStreetVec, street, &aux);
+        list->streetVec=addQtyToVec(list->streetVec, &list->dimStreetVec, street);
         if (list->streetVec==NULL)
             return 0;
-        if (aux.tQty > list->Q23.popStreet.tQty)
-            list->Q23.popStreet=aux;
+
         return 1;
     }
     return searchHood(list->tail, hood, street, tree);
@@ -137,6 +131,15 @@ int addTree (arbolesADT adt, const char * hood, const char * street, const char 
     return adt->list4!=NULL && searchHood(adt->list23, hood, street, tree);
 }
 
+static TreeStreet popValue(TreeStreet * vec, int dim) {
+  TreeStreet aux;
+  aux.tQty=0;
+  for (int i=0 ; i<dim ; i++) {
+    if (vec[i].tQty>aux.tQty)
+      aux=vec[i];
+  }
+  return aux;
+}
 
 TQ23 * solveQ23(arbolesADT adt, int * dim) {
     TQ23 *vec = malloc(sizeof(TQ23) * adt->dim23);
@@ -146,7 +149,9 @@ TQ23 * solveQ23(arbolesADT adt, int * dim) {
     size_t k = 0;
     TList23 aux = adt->list23;
     while (aux != NULL) {
-        vec[k++] = aux->Q23;
+        aux->Q23.popTree =popValue(aux->treeVec, aux->dimTreeVec);
+        aux->Q23.popStreet=popValue(aux->streetVec, aux->dimStreetVec);
+        vec[k++]=aux->Q23;
         aux = aux->tail;
     }
     return vec;
