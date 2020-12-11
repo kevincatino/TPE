@@ -37,9 +37,9 @@ int checkArgs(int args){
     return 0;
 }
 
-int openFiles(FILE ** hoodsFile, FILE ** treesFile, const char * argv[]){
-    *hoodsFile = fopen(argv[1],"r");
-    *treesFile = fopen(argv[2],"r");
+int openFiles(FILE ** treesFile, FILE ** hoodsFile, const char * argv[]){
+    *treesFile = fopen(argv[1],"r");
+    *hoodsFile = fopen(argv[2],"r");
     if (hoodsFile==NULL||treesFile==NULL){
         errorMsg(ERROR_OPENING);
         return ERROR_OPENING;
