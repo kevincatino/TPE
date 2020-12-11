@@ -15,8 +15,8 @@ int main (int args, const char * argv[]) {
 
     // Useful information:
     // argv[0] -> program name
-    // argv[1] -> hoods file (.csv)
-    // argv[2] -> trees file (.csv)
+    // argv[1] -> trees file (.csv)
+    // argv[2] -> hoods file (.csv)
 
     int error = checkArgs(args);
     if (error)
@@ -39,7 +39,7 @@ int main (int args, const char * argv[]) {
         return error;
 
 
-    error=solveQuerys (adt);
+    error=solveQuerys(adt);
     if (error)
       return error;
 
