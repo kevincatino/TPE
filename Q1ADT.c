@@ -34,9 +34,16 @@ static TList addHoodRec(TList list, const char * hood, double density) {
     return list;
 }
 
+static void truncate(double *val) {
+    *val *= 100;
+    int aux = (int)*val;
+    *val = aux/100.0;
+}
+
 static void addToVec(TList list, TQ1 * vec) {
     if (list==NULL)
         return;
+    truncate(&list->Q1.density);
     vec[0]=list->Q1;
     addToVec(list->tail, vec+1);
 }

@@ -5,7 +5,6 @@
 #include <strings.h>
 #define BLOCK 15
 
-
 struct TNode23 {
     TQ23 Q23;
     TreeStreet * treeVec;
