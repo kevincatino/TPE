@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <strings.h>
+#include <errno.h>
 #define BLOCK 15
 
 struct TNode23 {
@@ -32,29 +33,40 @@ struct arbolesCDT {
 };
 
 arbolesADT newStruct () {
-    return calloc(1, sizeof(struct arbolesCDT));
+    arbolesADT tree = calloc(1, sizeof(struct arbolesCDT));
+    if (tree == NULL || errno == ENOMEM) {
+        fprintf(stderr, "Error! Unable to create new structure\n");
+        return NULL;
+    }
+    return tree;
 }
 
-static TList23 addRecHood (TList23 list, const char * hood, int pQty) {
+static TList23 addRecHood (TList23 list, const char * hood, int pQty, int *added) {
     if (list==NULL || strcasecmp(hood, list->Q23.hood)<0) {
         TList23 aux=calloc(1,sizeof(*aux));
-        if (aux == NULL)
+        if (aux == NULL || errno == ENOMEM) {
+            fprintf(stderr, "Error! Unable to add neighbourhood\n");
             return NULL;
+        }
         aux->Q23.hood=malloc(sizeof(char)*(strlen(hood)+1));
-        if (aux->Q23.hood==NULL)
+        if (aux->Q23.hood==NULL || errno == ENOMEM) {
+            fprintf(stderr, "Error! Unable to save neighbourhood name\n");
             return NULL;
+        }
         strcpy(aux->Q23.hood, hood);
         aux->Q23.pQty=pQty;
         aux->tail=list;
+        *added = 1;
         return aux;
     }
-    list->tail=addRecHood(list->tail, hood, pQty);
+    list->tail=addRecHood(list->tail, hood, pQty, added);
     return list;
 }
 
 int addHood (arbolesADT adt, const char * hood, int pQty) {
-    adt->list23=addRecHood(adt->list23, hood, pQty);
-    adt->dim23++;
+    int added = 0;
+    adt->list23=addRecHood(adt->list23, hood, pQty, &added);
+    adt->dim23 += added;
     return adt->list23!=NULL;
 }
 
@@ -68,8 +80,10 @@ static TreeStreet * addQtyToVec(TreeStreet * vec, int * dim, const char * name) 
     }
     if (*dim%BLOCK==0) {
         vec=realloc(vec, sizeof(*vec)*(*dim+BLOCK));
-        if (vec==NULL)
+        if (vec==NULL || errno == ENOMEM) {
+            fprintf(stderr, "Error! Memory allocation failure\n");
             return NULL;
+        }
     }
     vec[*dim].name=malloc(sizeof(char)*(strlen(name)+1));
     strcpy(vec[*dim].name,name);
@@ -100,11 +114,15 @@ static TList4 addRecTreeQ4(TList4 list, const char * name, double diam, int * ad
     int c;
     if (list==NULL || (c=strcmp(name, list->Q4.tree))<0) {
         TList4 aux=malloc(sizeof(*aux));
-        if (aux==NULL)
+        if (aux==NULL || errno == ENOMEM) {
+            fprintf(stderr, "Error! Unable to add tree\n");
             return NULL;
+        }
         aux->Q4.tree=malloc(sizeof(char)*(strlen(name)+1));
-        if(aux->Q4.tree==NULL)
+        if(aux->Q4.tree==NULL || errno == ENOMEM) {
+            fprintf(stderr, "Error! Unable to save tree name\n");
             return NULL;
+        }
         strcpy(aux->Q4.tree, name);
         aux->Q4.dMin=aux->Q4.dMax=diam;
         aux->tail=list;
@@ -126,7 +144,6 @@ int addTree (arbolesADT adt, const char * hood, const char * street, const char 
     int added = 0;
     adt->list4=addRecTreeQ4(adt->list4, tree, diam, &added);
     adt->dim4+=added;
-
     return adt->list4!=NULL && searchHood(adt->list23, hood, street, tree);
 }
 

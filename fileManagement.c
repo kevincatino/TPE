@@ -255,6 +255,6 @@ int solveQuerys (arbolesADT adt) {
   if (error)
       return error;
 
-  printf("The files were created successfully\n");
+  printf("The files were created successfully!\n");
   return 0;
 }
