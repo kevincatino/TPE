@@ -6,7 +6,7 @@ typedef struct Q1CDT * Q1ADT;
 /*Structure used to return in array. "hood" is a string that contains the name of the neighborhood.
 "density" is a double that stores the density of trees/population for a given neighborhood*/
 typedef struct {
-    char * hood;
+    const char * hood;
     double density;
 }TQ1;
 

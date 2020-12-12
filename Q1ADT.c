@@ -19,8 +19,10 @@ Q1ADT newQ1struct () {
     return calloc(1, sizeof(struct Q1CDT));
 }
 
+
+
 static TList addHoodRec(TList list, const char * hood, double density) {
-    if (list==NULL || density > list->Q1.density) { //if two hoods have the same density, the one that is already on the list remains on that position.
+    if (list==NULL || density > list->Q1.density) { //if two hoods have the same density, the one that is already on the list remains on that position to preserve alphabetical order.
         TList aux=malloc(sizeof(*aux));
         if (aux==NULL) {
             return NULL;
