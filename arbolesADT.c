@@ -112,7 +112,7 @@ static int searchHood(TList23 list, const char * hood, const char * street, cons
 
 static TList4 addRecTreeQ4(TList4 list, const char * name, double diam, int * added) {
     int c;
-    if (list==NULL || (c=strcmp(name, list->Q4.tree))<0) {
+    if (list==NULL || (c=strcasecmp(name, list->Q4.tree))<0) {
         TList4 aux=malloc(sizeof(*aux));
         if (aux==NULL || errno == ENOMEM) {
             fprintf(stderr, "Error! Unable to add tree\n");
