@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
+#include <errno.h>
 
 struct TNode {
     TQ1 Q1;
@@ -19,12 +20,10 @@ Q1ADT newQ1struct () {
     return calloc(1, sizeof(struct Q1CDT));
 }
 
-
-
 static TList addHoodRec(TList list, const char * hood, double density) {
     if (list==NULL || density > list->Q1.density) { //if two hoods have the same density, the one that is already on the list remains on that position to preserve alphabetical order.
         TList aux=malloc(sizeof(*aux));
-        if (aux==NULL) {
+        if (aux==NULL || errno == ENOMEM) {
             return NULL;
         }
         aux->Q1.hood=hood;
@@ -58,7 +57,7 @@ int addQ1hood(Q1ADT adt, const char * hood, double density) {
 
 TQ1 *solveQ1(Q1ADT adt, int * dim) {
     TQ1 * vec =malloc(sizeof(*vec)*(adt->dim));
-    if (vec==NULL)
+    if (vec==NULL || errno == ENOMEM)
         return NULL;
     *dim=adt->dim;
     addToVec(adt->list, vec);
