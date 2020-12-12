@@ -25,7 +25,11 @@ static TList addHoodRec(TList list, const char * hood, double density) {
         if (aux==NULL) {
             return NULL;
         }
-        aux->Q1.hood=hood;
+        aux->Q1.hood = malloc(sizeof(char) * (strlen(hood) + 1));
+        if (aux->Q1.hood == NULL) {
+            return NULL;
+        }
+        strcpy(aux->Q1.hood,hood);
         aux->Q1.density=density;
         aux->tail=list;
         return aux;
